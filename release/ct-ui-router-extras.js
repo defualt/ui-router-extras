@@ -209,7 +209,7 @@ angular.module("ct.ui.router.extras").service("$deepStateRedirect", [ '$rootScop
     return angular.toJson(paramsToString);
   }
 
-  $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+  $rootScope.$on("$realStateChangeStart", function (event, toState, toParams, fromState, fromParams) {
     if (ignoreDsr || computeDeepStateStatus(toState) !== REDIRECT) return;
     // We're changing directly to one of the redirect (tab) states.
     // Get the DSR key for this state by calculating the DSRParams option
@@ -1027,7 +1027,7 @@ angular.module('ct.ui.router.extras').service("$previousState",
 
       var lastPrevious = null;
 
-      $rootScope.$on("$stateChangeStart", function (evt, toState, toStateParams, fromState, fromStateParams) {
+      $rootScope.$on("$realStateChangeStart", function (evt, toState, toStateParams, fromState, fromStateParams) {
         // State change is starting.  Keep track of the CURRENT previous state in case we have to restore it
         lastPrevious = previous;
         previous = { state: fromState, params: fromStateParams };
@@ -1142,7 +1142,7 @@ angular.module("ct.ui.router.extras").config( [ "$provide",  function ($provide)
           };
 
           // This event is handled synchronously in transitionTo call stack
-          $rootScope.$on("$stateChangeStart", function (evt, toState, toParams, fromState, fromParams) {
+          $rootScope.$on("$realStateChangeStart", function (evt, toState, toParams, fromState, fromParams) {
               var depth = transitionDepth;
               // To/From is now normalized by ui-router.  Add this information to the transition data object.
               var tData = angular.extend(tDataStack[depth], {
